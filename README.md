@@ -16,19 +16,40 @@ Hooks（自動化）、スキル（カスタムコマンド）、メモリシス
 
 ## インストール
 
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/DBA-Japan/claude-code-toolkit/main/install.sh)
+### 方法1: Claude Code に頼む（最速）
+
+Claude Code を起動して、こう打つだけ：
+
+```
+https://github.com/DBA-Japan/claude-code-toolkit をインストールして
 ```
 
-インストーラーが対話形式であなたの情報を聞き、環境に合わせてセットアップします。
+Claude が自動で clone → インストール → 設定完了まで行います。許可を求められたら承認するだけ。
 
-### 手動インストール
+### 方法2: 対話モード（自分でカスタマイズ）
 
 ```bash
 git clone https://github.com/DBA-Japan/claude-code-toolkit.git
 cd claude-code-toolkit
 bash install.sh
 ```
+
+### 方法3: ワンライナー（クイック）
+
+```bash
+git clone https://github.com/DBA-Japan/claude-code-toolkit.git && cd claude-code-toolkit && bash install.sh --quick --name "あなたの名前" --role "あなたの役割"
+```
+
+### オプション
+
+```bash
+bash install.sh --quick                    # デフォルト設定で即インストール
+bash install.sh --all                      # 全コンポーネント入り
+bash install.sh --quick --name "太郎"      # 名前だけ指定
+bash install.sh --help                     # ヘルプ表示
+```
+
+**既にClaude Codeを使っている人も安心**: 既存の settings.json・CLAUDE.md・MEMORY.md は自動バックアップされ、上書きされません。新しいHooksとスキルだけが追加されます。
 
 ## 含まれるスキル一覧
 
