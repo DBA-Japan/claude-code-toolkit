@@ -17,7 +17,7 @@ Hooks（自動化）、スキル（カスタムコマンド）、メモリシス
 ## インストール
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/munchtokyo/claude-code-toolkit/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/DBA-Japan/claude-code-toolkit/main/install.sh)
 ```
 
 インストーラーが対話形式であなたの情報を聞き、環境に合わせてセットアップします。
@@ -25,7 +25,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/munchtokyo/claude-code-toolk
 ### 手動インストール
 
 ```bash
-git clone https://github.com/munchtokyo/claude-code-toolkit.git
+git clone https://github.com/DBA-Japan/claude-code-toolkit.git
 cd claude-code-toolkit
 bash install.sh
 ```
