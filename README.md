@@ -9,10 +9,10 @@ Hooks（自動化）、スキル（カスタムコマンド）、メモリシス
 | カテゴリ | 内容 | 数 |
 |---------|------|----|
 | **Hooks** | セッション自動保存/復元、ヘルスチェック、セキュリティ、学習観察 | 11 個 |
-| **スキル** | コンテキスト管理、品質監査、セッション保存、学習評価 等 | 11 個 |
+| **スキル** | コンテキスト管理、品質監査、セッション保存、ホテル運営 等 | 18 個 |
 | **メモリシステム** | MEMORY.md + 個別ファイルのインデックス設計 | テンプレート |
-| **リファレンス** | Web 制作ライブラリ 50+、デザインパターン、CSS テクニック、CC エコシステム | 15 ファイル |
-| **ガイド** | 初心者ガイド、致命的ミス回避、Apple 級デザイン、スキル設計 等 | 8 ファイル |
+| **リファレンス** | Web 制作ライブラリ 50+、デザインパターン、ホテル運営、CC エコシステム | 16 ファイル |
+| **ガイド** | 初心者ガイド、ホテル経営者向け入門、Apple 級デザイン 等 | 9 ファイル |
 
 ## インストール
 
@@ -66,6 +66,13 @@ bash install.sh --help                     # ヘルプ表示
 | `/instinct` | 使い方パターンの可視化・進化 |
 | `/context-switch` | DEV/RESEARCH/REVIEW モード切替 |
 | `/chief-of-staff` | メッセージの仕分け・緊急度判定 |
+| `/guest-reply` | ゲストメッセージ返信（多言語対応） |
+| `/ota-listing` | OTA 物件説明文の最適化 |
+| `/review-reply` | レビュー返信の生成 |
+| `/operation-manual` | 運営マニュアル・チェックリスト作成 |
+| `/business-report` | 月次レポート・事業分析 |
+| `/sns-post` | SNS 投稿文の生成 |
+| `/admin-docs` | 行政書類・申請書の下書き |
 
 ## 含まれる Hooks 一覧
 
@@ -83,7 +90,7 @@ bash install.sh --help                     # ヘルプ表示
 | `pre-compact.sh` | PreCompact | 圧縮前にセッション状態を保存 |
 | `parse-transcript.py` | (内部) | トランスクリプト解析 |
 
-## Web 制作リファレンス（15 ファイル）
+## リファレンス（16 ファイル）
 
 | ファイル | 内容 |
 |---------|------|
@@ -102,8 +109,9 @@ bash install.sh --help                     # ヘルプ表示
 | `clip-path-reveals.md` | セクション出現アニメ 6 手法（円拡大、ブラインド、ダイヤモンド等） |
 | `section-transitions.md` | seam のないセクション色遷移 + Twilight Protocol 10 段階パレット |
 | `world-class-sites.md` | Stripe / Linear / Vercel / 日本企業 TOP10 の分析 |
+| `hotel-operations.md` | 宿泊施設運営リファレンス（OTA 運用、料金設定、多言語対応） |
 
-## ガイド一覧（8 ファイル）
+## ガイド一覧（9 ファイル）
 
 | ファイル | 内容 |
 |---------|------|
@@ -115,6 +123,7 @@ bash install.sh --help                     # ヘルプ表示
 | `claude-peers.md` | マルチインスタンス連携 |
 | `web-build-lessons.md` | Web 制作の致命的ミス集 & 解決パターン |
 | `apple-quality-design.md` | Apple / Stripe / Linear 級デザインガイド |
+| `hotel-getting-started.md` | ホテル経営者向け Claude Code 入門ガイド |
 
 ## ディレクトリ構成
 
@@ -122,12 +131,12 @@ bash install.sh --help                     # ヘルプ表示
 claude-code-toolkit/
 ├── install.sh               # インタラクティブインストーラー
 ├── CLAUDE.md.template        # CLAUDE.md テンプレート
-├── commands/                 # カスタムスキル (11個)
+├── commands/                 # カスタムスキル (18個)
 ├── hooks/                    # 自動化フック (11個)
 ├── memory/                   # メモリシステムテンプレート
 ├── settings/                 # 設定テンプレート
-├── references/               # Web 制作・CC リファレンス (15個)
-└── guides/                   # 使い方ガイド (8個)
+├── references/               # Web 制作・ホテル運営リファレンス (16個)
+└── guides/                   # 使い方ガイド (9個)
 ```
 
 ## claude-peers（マルチインスタンス連携）

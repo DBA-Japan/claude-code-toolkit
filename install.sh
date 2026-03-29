@@ -89,7 +89,8 @@ if [ "$QUICK_MODE" = true ]; then
     1) USE_CASE_TEXT="Web制作・開発" ;;
     2) USE_CASE_TEXT="ビジネス・営業" ;;
     3) USE_CASE_TEXT="リサーチ・分析" ;;
-    *) USE_CASE_TEXT="汎用（全領域）"; USE_CASE="4" ;;
+    4) USE_CASE_TEXT="ホテル・宿泊施設運営" ;;
+    *) USE_CASE_TEXT="汎用（全領域）"; USE_CASE="5" ;;
   esac
 
   echo -e "${BOLD}⚡ クイックモード${NC}"
@@ -121,21 +122,23 @@ else
     echo "    [1] Web制作・開発"
     echo "    [2] ビジネス・営業"
     echo "    [3] リサーチ・分析"
-    echo "    [4] 全部入り"
-    read -p "  番号を選択 (1-4): " USE_CASE
+    echo "    [4] ホテル・宿泊施設運営"
+    echo "    [5] 全部入り"
+    read -p "  番号を選択 (1-5): " USE_CASE
   fi
   case "$USE_CASE" in
     1) USE_CASE_TEXT="Web制作・開発" ;;
     2) USE_CASE_TEXT="ビジネス・営業" ;;
     3) USE_CASE_TEXT="リサーチ・分析" ;;
-    *) USE_CASE_TEXT="汎用（全領域）"; USE_CASE="4" ;;
+    4) USE_CASE_TEXT="ホテル・宿泊施設運営" ;;
+    *) USE_CASE_TEXT="汎用（全領域）"; USE_CASE="5" ;;
   esac
 
   echo ""
   echo -e "${BOLD}📦 オプション${NC}"
 
   if [ -z "$INSTALL_WEB_REF" ]; then
-    if [ "$USE_CASE" = "1" ] || [ "$USE_CASE" = "4" ]; then
+    if [ "$USE_CASE" = "1" ] || [ "$USE_CASE" = "4" ] || [ "$USE_CASE" = "5" ]; then
       INSTALL_WEB_REF="y"
       echo -e "  ${GREEN}✅${NC} Web制作リファレンス — 用途に基づき自動選択"
     else
