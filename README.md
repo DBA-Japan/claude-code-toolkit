@@ -73,6 +73,7 @@ bash install.sh --help                     # ヘルプ表示
 | `/business-report` | 月次レポート・事業分析 |
 | `/sns-post` | SNS 投稿文の生成 |
 | `/admin-docs` | 行政書類・申請書の下書き |
+| `/translate-hotel` | 宿泊業特化の多言語翻訳（5 言語 + 文化説明） |
 
 ## 含まれる Hooks 一覧
 
