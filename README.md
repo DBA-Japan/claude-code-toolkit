@@ -9,10 +9,10 @@ Hooks（自動化）、スキル（カスタムコマンド）、メモリシス
 | カテゴリ | 内容 | 数 |
 |---------|------|----|
 | **Hooks** | セッション自動保存/復元、ヘルスチェック、セキュリティ、学習観察 | 11 個 |
-| **スキル** | コンテキスト管理、品質監査、セッション保存、ホテル運営 等 | 18 個 |
+| **スキル** | コンテキスト管理、品質監査、セッション保存、ホテル運営、AI臭消し 等 | 19 個 |
 | **メモリシステム** | MEMORY.md + 個別ファイルのインデックス設計 | テンプレート |
 | **リファレンス** | Web 制作ライブラリ 50+、デザインパターン、ホテル運営、CC エコシステム | 16 ファイル |
-| **ガイド** | 初心者ガイド、ホテル経営者向け入門、Apple 級デザイン 等 | 9 ファイル |
+| **ガイド** | 初心者ガイド、ホテル経営者向け入門、Apple 級デザイン、humanizer カスタマイズ、クリック編集設定 等 | 11 ファイル |
 
 ## インストール
 
@@ -74,6 +74,7 @@ bash install.sh --help                     # ヘルプ表示
 | `/sns-post` | SNS 投稿文の生成 |
 | `/admin-docs` | 行政書類・申請書の下書き |
 | `/translate-hotel` | 宿泊業特化の多言語翻訳（5 言語 + 文化説明） |
+| `/humanizer` | AI 臭消し・文章自然化（Wikipedia "Signs of AI writing" 25 パターン準拠） |
 
 ## 含まれる Hooks 一覧
 
@@ -112,7 +113,7 @@ bash install.sh --help                     # ヘルプ表示
 | `world-class-sites.md` | Stripe / Linear / Vercel / 日本企業 TOP10 の分析 |
 | `hotel-operations.md` | 宿泊施設運営リファレンス（OTA 運用、料金設定、多言語対応） |
 
-## ガイド一覧（9 ファイル）
+## ガイド一覧（11 ファイル）
 
 | ファイル | 内容 |
 |---------|------|
@@ -125,6 +126,8 @@ bash install.sh --help                     # ヘルプ表示
 | `web-build-lessons.md` | Web 制作の致命的ミス集 & 解決パターン |
 | `apple-quality-design.md` | Apple / Stripe / Linear 級デザインガイド |
 | `hotel-getting-started.md` | ホテル経営者向け Claude Code 入門ガイド |
+| `humanizer-customization.md` | `/humanizer` を「自分の文体」にアレンジする 3 ステップ |
+| `click-edit-cursor-setup.md` | CC 入力欄でマウスクリック→カーソル移動を有効化（公式 NO_FLICKER + Cidan/ask 解説）|
 
 ## ディレクトリ構成
 
@@ -132,12 +135,12 @@ bash install.sh --help                     # ヘルプ表示
 claude-code-toolkit/
 ├── install.sh               # インタラクティブインストーラー
 ├── CLAUDE.md.template        # CLAUDE.md テンプレート
-├── commands/                 # カスタムスキル (18個)
+├── commands/                 # カスタムスキル (19個)
 ├── hooks/                    # 自動化フック (11個)
 ├── memory/                   # メモリシステムテンプレート
 ├── settings/                 # 設定テンプレート
 ├── references/               # Web 制作・ホテル運営リファレンス (16個)
-└── guides/                   # 使い方ガイド (9個)
+└── guides/                   # 使い方ガイド (11個)
 ```
 
 ## claude-peers（マルチインスタンス連携）
