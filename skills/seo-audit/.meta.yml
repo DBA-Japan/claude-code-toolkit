@@ -1,0 +1,26 @@
+# seo-audit スキル メタ情報
+
+source_repo: https://github.com/sickn33/antigravity-awesome-skills
+source_path: plugins/antigravity-bundle-web-wizard/skills/seo-audit/SKILL.md
+source_license: MIT
+source_date: 2026-02-27
+local_imported: 2026-04-22
+local_wrapper_version: 1.0
+
+local_diffs:
+  - 日本語ラッパー化（本体は原本で保持）
+  - hreflang 必須化（多言語案件対応）
+  - Vanilla HTML+CSS 前提に修正
+  - Netlify 前提の _redirects/Forms/Edge Functions 文脈
+  - 他スキル境界明示（/de-sloppify /web-design-review 等と区別）
+
+update_protocol:
+  - 原本が v2 になった場合:
+    - SKILL-en.md を差し替え
+    - diff を reference/CHANGELOG-upstream.md に記録
+    - 日本語ラッパーのローカル差分は手動でマージ
+    - local_imported の日付と local_wrapper_version を更新
+
+review_schedule:
+  30day_check: 2026-05-22  # 導線妥当性レビュー
+  90day_check: 2026-07-22  # 継続可否（四半期re-eval）

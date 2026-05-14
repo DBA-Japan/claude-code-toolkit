@@ -1,0 +1,219 @@
+{
+  "$schema": "./skill-requirements.schema.json",
+  "version": "1.0.0",
+  "description": "/doctor が読む依存マニフェスト。skill / command / mcp ごとに必要な env / brew / pip / npm / auth を宣言。",
+
+  "skills": {
+    "humanizer": {
+      "description": "AI 臭い文章を自然な文章に修正",
+      "requires": {}
+    },
+    "notebooklm": {
+      "description": "Google NotebookLM 完全 API（ノートブック・ポッドキャスト生成）",
+      "requires": {
+        "auth": ["google-oauth"],
+        "pip": ["google-genai"]
+      }
+    },
+    "veo3": {
+      "description": "Google AI Studio で写真 → 動画",
+      "requires": {
+        "env": ["GEMINI_API_KEY"],
+        "pip": ["google-genai"]
+      }
+    },
+    "video": {
+      "description": "素材動画 → YouTube + ショート",
+      "requires": {
+        "brew": ["ffmpeg", "whisper-cpp", "yt-dlp"]
+      }
+    },
+    "hyperframes": {
+      "description": "HTML/GSAP 起点の動画制作",
+      "requires": {
+        "npm": ["hyperframes-cli"]
+      }
+    },
+    "hyperframes-cli": {
+      "description": "hyperframes 用 CLI",
+      "requires": {
+        "node": true
+      }
+    },
+    "gsap": {
+      "description": "GSAP アニメーション辞典",
+      "requires": {}
+    },
+    "website-to-hyperframes": {
+      "description": "URL → 動画",
+      "requires": {
+        "mcp": ["playwright"],
+        "npm": ["hyperframes-cli"]
+      }
+    },
+    "design-extract": {
+      "description": "参考サイトのデザイン要素抽出",
+      "requires": {
+        "browser": "chrome",
+        "extension": "DESIGN.md Style Extractor (typeui.sh)"
+      }
+    },
+    "seo-audit": {
+      "description": "Web ページの SEO 監査",
+      "requires": {
+        "mcp": ["playwright"]
+      },
+      "optional": true
+    },
+    "skill-creator": {
+      "description": "新しい skill を作る/評価",
+      "requires": {}
+    },
+    "self-improving-agent": {
+      "description": "MEMORY.md 棚卸し・パターン昇格",
+      "requires": {}
+    },
+    "ui-ux-lookup": {
+      "description": "UI/UX データベース引き当て",
+      "requires": {
+        "data_repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill"
+      }
+    },
+    "latent-demand": {
+      "description": "提案文の既存行動寄生検査",
+      "requires": {}
+    }
+  },
+
+  "commands": {
+    "doctor":   { "description": "環境診断", "requires": {} },
+    "research": {
+      "description": "リサーチ全部入り",
+      "requires": {
+        "recommended_mcp": ["exa", "perplexity", "context7"]
+      }
+    },
+    "pptx": {
+      "description": "PPTX 制作",
+      "requires": {
+        "pip": ["python-pptx"],
+        "optional_brew": ["libreoffice"]
+      }
+    },
+    "video": {
+      "description": "動画制作",
+      "requires": {
+        "skills": ["veo3", "video", "hyperframes", "website-to-hyperframes"]
+      }
+    },
+    "ocr": {
+      "description": "日本語 OCR",
+      "requires": {
+        "env": ["GEMINI_API_KEY"],
+        "pip": ["google-genai"]
+      }
+    },
+    "codex": {
+      "description": "Codex セカンドオピニオン",
+      "requires": {
+        "cli": ["codex"],
+        "env": ["OPENAI_API_KEY"]
+      },
+      "optional": true
+    }
+  },
+
+  "mcp": {
+    "exa": {
+      "description": "Exa Web 検索",
+      "requires": { "env": ["EXA_API_KEY"] },
+      "install_command": "claude mcp add --scope user exa npx -y exa-mcp",
+      "signup_url": "https://exa.ai/"
+    },
+    "perplexity": {
+      "description": "Perplexity 鮮度重視リサーチ",
+      "requires": { "env": ["PERPLEXITY_API_KEY"] },
+      "install_command": "claude mcp add --scope user perplexity npx -y perplexity-mcp",
+      "signup_url": "https://perplexity.ai/"
+    },
+    "playwright": {
+      "description": "ブラウザ操作・スクレイピング",
+      "requires": { "browser": "chromium" },
+      "install_command": "claude mcp add --scope user playwright npx -y @microsoft/playwright-mcp"
+    },
+    "context7": {
+      "description": "ライブラリ docs（最新）",
+      "requires": {},
+      "install_command": "claude mcp add --scope user context7 npx -y @upstash/context7-mcp"
+    },
+    "repomix": {
+      "description": "リモートリポジトリ解析",
+      "requires": {},
+      "install_command": "claude mcp add --scope user repomix npx -y repomix"
+    },
+    "claude-peers": {
+      "description": "マルチインスタンス通信",
+      "requires": { "bun": true, "git_clone": "https://github.com/louislva/claude-peers-mcp" },
+      "setup_guide": "mcp-servers/claude-peers-setup.md"
+    }
+  },
+
+  "tools": {
+    "gemini-ocr.py": {
+      "description": "日本語 OCR スクリプト",
+      "requires": {
+        "env": ["GEMINI_API_KEY"],
+        "pip": ["google-genai"]
+      }
+    },
+    "cdp-scripts/": {
+      "description": "Chrome DevTools Protocol 操作",
+      "requires": {
+        "pip": ["websockets", "requests"]
+      }
+    }
+  },
+
+  "api_keys": {
+    "GEMINI_API_KEY": {
+      "used_by": ["veo3", "ocr", "gemini-ocr.py"],
+      "signup_url": "https://aistudio.google.com/apikey",
+      "cost_tier": "low"
+    },
+    "EXA_API_KEY": {
+      "used_by": ["research (exa MCP)"],
+      "signup_url": "https://exa.ai/",
+      "cost_tier": "metered"
+    },
+    "PERPLEXITY_API_KEY": {
+      "used_by": ["research (perplexity MCP)"],
+      "signup_url": "https://perplexity.ai/",
+      "cost_tier": "metered"
+    },
+    "OPENAI_API_KEY": {
+      "used_by": ["codex"],
+      "signup_url": "https://platform.openai.com/api-keys",
+      "cost_tier": "metered",
+      "optional": true
+    }
+  },
+
+  "external_packages": {
+    "brew": {
+      "ffmpeg":        { "size_mb": 50,  "required_by": ["video"] },
+      "whisper-cpp":   { "size_mb": 30,  "required_by": ["video"] },
+      "yt-dlp":        { "size_mb": 5,   "required_by": ["video"] },
+      "libreoffice":   { "size_mb": 600, "required_by": ["pptx PDF conversion"], "optional": true }
+    },
+    "pip": {
+      "google-genai":  { "required_by": ["veo3", "ocr"] },
+      "python-pptx":   { "required_by": ["pptx"] },
+      "websockets":    { "required_by": ["cdp-scripts"] },
+      "requests":      { "required_by": ["cdp-scripts"] },
+      "Pillow":        { "required_by": ["pptx (image processing)"], "optional": true }
+    },
+    "npm": {
+      "hyperframes-cli": { "required_by": ["hyperframes", "website-to-hyperframes"] }
+    }
+  }
+}

@@ -1,35 +1,61 @@
 # Memory Index
 
-このファイルはメモリシステムのインデックスです。
-個別のメモリファイルへのポインターを管理します。
+このファイルはメモリシステムのインデックスです。個別のメモリファイルへのポインタを管理します。
 
 ## 使い方
-- Claude が学んだことを保存する時、個別の .md ファイルを作成し、ここにリンクを追加します
-- `/learn-eval` コマンドで品質評価してから保存するのがベストプラクティスです
-- 200行以内に収めてください（超過分は読み込まれません）
+
+- Claude が会話中に学んだ「あなたの好み・指示・プロジェクト・外部リソース」を、自動でこの `memory/` 配下に `.md` として保存します
+- 保存されたファイルはここに **1 行 index** として追記されます
+- 次のセッション開始時にこの MEMORY.md が自動ロードされます
+- `/learn-eval` で品質評価してから保存するのがベストプラクティス
+- **200 行 / 25 KB 以内** に収めてください（超過分はサイレント切り捨て）
+
+詳細: `guides/auto-learning-system.md`
 
 ## メモリの種類
 
 | タイプ | 用途 | 例 |
 |--------|------|-----|
-| `user` | あなたの役割・好み・知識 | 「エンジニア歴10年、React専門」 |
-| `feedback` | Claudeへの指示・修正 | 「テスト時にDBをモックしない」 |
-| `project` | プロジェクトの状況・決定事項 | 「v2リリースは4月予定」 |
-| `reference` | 外部リソースの場所 | 「バグはLinearのINGESTプロジェクトで管理」 |
+| `user` | あなたの役割・前提・好み | 「React 5 年、日本語 UI 案件中心」 |
+| `feedback` | Claude への指示・修正・ガイダンス | 「テストでモック禁止」 |
+| `project` | プロジェクトの状況・決定事項 | 「v2 リリースは 7 月、レビュー担当: 田中さん」 |
+| `reference` | 外部リソースの場所 | 「Bug は Linear `INGEST` プロジェクト」 |
 
 ## メモリファイルのフォーマット
 
 ```markdown
 ---
-name: メモリの名前
-description: 1行の説明（将来の検索に使われる）
-type: user / feedback / project / reference
+name: 短い-kebab-case-スラッグ
+description: 1 行の説明（将来の関連性判定に使われる）
+metadata:
+  type: user / feedback / project / reference
 ---
 
-メモリの内容
+メモリの本文。
+
+feedback / project の場合は以下も書く:
+
+**Why:** その指示・状況の理由
+**How to apply:** いつ・どこで適用するか
 ```
 
+リンクは `[[name]]` で他メモリを参照可能。
+
+## 月次棚卸し
+
+毎月 1 日に推奨:
+
+1. `/instinct evolve` — 昇格候補を抽出
+2. `/learn-eval evolve` — 採用パターンを memory 化
+3. `/self-improving-agent` — 棚卸し・archive
+
+詳細: `guides/instinct-and-evolution.md`
+
 ---
 
-<!-- ここから下にメモリへのリンクを追加していく -->
-
+<!-- ここから下にメモリへのリンクを追加していく（1 行 / 1 エントリ） -->
+<!-- 例:
+- [feedback-no-mocks](./feedback-no-mocks.md) — テストでモック禁止、実 DB 使用
+- [user-role-engineer](./user-role-engineer.md) — React 5 年、日本語 UI 中心
+- [project-q3-launch](./project-q3-launch.md) — 7 月ローンチ、田中さん担当
+-->

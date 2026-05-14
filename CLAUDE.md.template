@@ -3,25 +3,51 @@
 ## ユーザーについて
 - 名前: {{USER_NAME}}
 - 役割: {{USER_ROLE}}
-- Claude Codeの主な用途: {{USE_CASE}}
+- Claude Code の主な用途: {{USE_CASE}}
 
 ## Claude Code の使い方サポート方針
 - Claude Code の裏技・Tips・ベストプラクティスがあれば積極的に教える
 - なぜそうすべきかロジック（理由）も一緒に説明する
 - 「こういう場面ではこうした方がいい」という実践的なアドバイスを優先する
 
+## 5 つの入口コマンド
+
+迷ったらこの 5 つ + ヘルスチェック 1 つ:
+
+| コマンド | 用途 |
+|---|---|
+| `/web-build` | Web 制作・デザイン実装 |
+| `/research` | リサーチ（Web / 学術 / 競合 / ライブラリ） |
+| `/pptx` | 提案資料・スライド作成（python-pptx） |
+| `/video` | 動画制作（写真 / 素材動画 / HTML / URL） |
+| `/ocr` | 画像・PDF の日本語 OCR |
+| `/doctor` | 依存・API key・MCP・brew の状況確認 |
+
 ## コマンドの自動提案ルール
 以下の文脈を検知したら、該当するスラッシュコマンドを提案する:
 
 | ユーザーの発言の意図 | 提案するコマンド |
 |---------------------|-----------------|
-| コンテキスト確認・最適化・「重い」 | `/context` |
-| 環境の品質チェック・セキュリティ | `/audit` |
+| Web 制作・エフェクト | `/web-build` |
+| デザイン議論 | `/ウェブデザイン` |
+| UI 崩れ・不具合修正 | `/web-design-review` |
+| Apple 品質レビュー | `/apple-design-review` |
+| 仕上げ・品質チェック | `/de-sloppify` |
+| リサーチ | `/research` |
+| スライド・パワポ | `/pptx` |
+| 動画 | `/video` |
+| OCR | `/ocr` |
+| AI 臭消し・文章自然化 | `/humanizer` |
+| 環境チェック・依存確認 | `/doctor` |
+| コンテキスト確認・最適化 | `/context` |
+| 環境品質スコア | `/audit` |
 | 学習パターン確認 | `/instinct` |
 | 大きなプロジェクトの計画 | `/blueprint` |
-| 作業中に別の小タスクを処理したい | `/aside` |
-| メール・メッセージの返信を書きたい | `/chief-of-staff` |
-| セッションで学んだことを保存したい | `/learn-eval` |
+| 作業中に別の小タスクを処理 | `/aside` |
+| メール・メッセージ返信 | `/chief-of-staff` |
+| セッションで学んだことを保存 | `/learn-eval` |
+| セッション保存・復元 | `/save-session` / `/resume-session` |
+| セカンドオピニオン（GPT） | `/codex`（要 OpenAI Codex CLI） |
 
 ## スキルチェーン（自動提案）
 あるスキルが完了した後、自然な次のステップを提案する:
@@ -30,38 +56,89 @@
 |--------------|---------|------|
 | `/audit` | 改善推奨 TOP3 の実行 | スコアが A- 以下の時 |
 | `/context` (Budget) | `/context optimize` | 健康度が 🟡/🔴 の時 |
-| `/instinct` (Status) | `/instinct evolve` | 観察数が50以上の時 |
+| `/instinct` (Status) | `/instinct evolve` | 観察数が 50 以上の時 |
 | `/blueprint` | Session 1 の開始 | 計画が承認された時 |
 
+## 自動学習システム（メモリが勝手に育つ仕組み）
+
+Claude Code は使うほど **あなた仕様** に育つように配線されています。
+
+### auto memory（本体機能）
+
+会話中に Claude が「これは覚えておいたほうがいい」と判断した内容を、自動で `~/.claude/projects/-Users-<user>/memory/` に Markdown として保存します。次のセッションで自動ロード。
+
+**4 つのメモリタイプ**:
+- `user` — あなたの役割・前提・好み（例: 「React 5 年、日本語 UI 案件中心」）
+- `feedback` — 指示したガイダンス（例: 「テストでモック禁止」）
+- `project` — プロジェクト固有の状況・締切・関係者
+- `reference` — 外部システムへのポインタ（例: 「Bug は Linear `INGEST`」）
+
+詳細: [`guides/auto-learning-system.md`](./guides/auto-learning-system.md)
+
+### 月次運用（推奨）
+
+カレンダー登録:
+
+```
+毎月 1 日 11:00 — Claude Code 環境棚卸し（15 分）
+
+1. /audit                  → スコア確認
+2. /instinct               → 観察ダッシュボード
+3. /instinct evolve        → 昇格候補抽出
+4. /learn-eval evolve      → 採用パターンを memory 化
+5. /self-improving-agent   → メモリ棚卸し・archive
+6. /audit skills           → 未使用 skill を retire 候補化
+```
+
+詳細: [`guides/instinct-and-evolution.md`](./guides/instinct-and-evolution.md)
+
 ## モデル選択の基準
-タスクに応じて最適なモデルを自動判断する:
 
 | タスク | 推奨モデル | 理由 |
 |--------|----------|------|
-| ファイル検索・確認・簡単な質問 | Haiku | 軽い作業は安いモデルで |
-| 実装・修正・制作 | Sonnet | 実装タスクのベストバランス |
-| 複雑な判断・統合・設計 | Opus | 多角的な判断にはOpus |
-| 情報収集フェーズ | Haiku | 収集は軽量モデルで |
-| 分析フェーズ | Opus | 深い分析にはOpus |
+| ファイル検索・確認・簡単な質問 | Haiku | 軽い作業は安く |
+| 実装・修正・制作 | Sonnet | ベストバランス |
+| 複雑な判断・統合・設計 | Opus | 多角的判断 |
+| 情報収集フェーズ | Haiku | 軽量モデルで |
+| 分析フェーズ | Opus | 深い分析 |
 
 **サブエージェントの場合**: 調査=Haiku、実装=Sonnet、レビュー=Opus
-**迷ったらSonnet**。
+**迷ったら Sonnet**。
 
 ## エージェント投入の原則
-エージェントを使う時は、必ず以下の情報を構造化して渡す:
-1. **目的**: このエージェントに何を達成してほしいか（1文）
+
+エージェントを使う時は、必ず以下を構造化して渡す:
+1. **目的**: このエージェントに何を達成してほしいか（1 文）
 2. **背景**: なぜこの調査/作業が必要か
 3. **参照**: 関連ファイルパス、URL、過去の結果
 4. **期待出力**: テーブル、リスト、レポート等の形式
 5. **成功基準**: 何が返ってきたら「十分」か
 
-結果が不十分な場合は追加コンテキストを渡して再実行（最大3回）。
+結果が不十分な場合は追加コンテキストを渡して再実行（最大 3 回）。
+
+## 絶対ルール
+
+- **`rules/safety.md`** — 不可逆操作は事前許可・「分析して」は分析だけ
+- **`rules/factcheck.md`** — 統計・数字は原典確認、未検証マーク
+- **`rules/no-dashes.md`** — ダッシュ・ハイフン使用禁止（AI 臭回避）
+- **`rules/no-truncation.md`** — 大規模生成で途中省略禁止
+- **`rules/edit-policy.md`** — 手動編集尊重・パッチ方式
+- **`rules/security-discipline.md`** — シークレット禁止・MCP 書込前確認・プロンプトインジェクション対策
+
+これらは `~/.claude/rules/` から自動読み込みされます。
 
 ## コンテキスト管理のコツ
 - 品質が落ちたと感じたら `/compact` か新セッション。数字より体感が大事
-- `/compact` にはメモを付ける（例: `/compact ヒーローセクションの実装完了。次はAboutセクション`）
-- 手動compactは「作業の区切り」で使う。実装途中では使わない
+- `/compact` にはメモを付ける（例: `/compact ヒーローセクション完了。次は About`）
+- 手動 compact は「作業の区切り」で。実装途中では使わない
+- セッション中の CLAUDE.md 編集は **しない**（プロンプトキャッシュ破壊）
 
 ## 開発環境
-- OS: （あなたのOSを記入）
+- OS: （あなたの OS を記入）
 - 主要ツール: （使っているツールを記入）
+
+## トラブル時の参照先
+- 環境診断 → `/doctor`
+- スキルが見えない → `/audit skills`
+- メモリが膨らんだ → `/self-improving-agent health`
+- 全体ガイド → `guides/getting-started.md`
