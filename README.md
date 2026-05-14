@@ -1,158 +1,161 @@
 # Claude Code Toolkit
 
-Claude Code を「別物」にするセットアップキット。
+Claude Code を「別物」にする、ファイルコピー型のセットアップキット。
 
-Hooks（自動化）、スキル（カスタムコマンド）、メモリシステム、リファレンス集を 1 コマンドでインストール。
+**インストール後にあなたが手にするもの**:
 
-## 何が入っているか
-
-| カテゴリ | 内容 | 数 |
-|---------|------|----|
-| **Hooks** | セッション自動保存/復元、ヘルスチェック、セキュリティ、学習観察 | 11 個 |
-| **スキル** | コンテキスト管理、品質監査、セッション保存、ホテル運営、AI臭消し 等 | 19 個 |
-| **メモリシステム** | MEMORY.md + 個別ファイルのインデックス設計 | テンプレート |
-| **リファレンス** | Web 制作ライブラリ 50+、デザインパターン、ホテル運営、CC エコシステム | 16 ファイル |
-| **ガイド** | 初心者ガイド、ホテル経営者向け入門、Apple 級デザイン、humanizer カスタマイズ、クリック編集設定 等 | 11 ファイル |
+- 入口 5 コマンド: `/web-build` `/research` `/pptx` `/video` `/ocr` + `/doctor`
+- **勝手に育つ環境**: auto memory + instinct 観察 + 月次棚卸しサイクル
+- 11 個の skill / 15 個の汎用 sub-agent / 6 個の絶対ルール
+- Web 制作・動画・PPTX・OCR・リサーチの全パイプライン
 
 ## インストール
 
-### 方法 1: Claude Code に頼む（最速）
-
-Claude Code を起動して、こう打つだけ：
+### 推奨: Claude Code に「インストールして」と頼む
 
 ```
 https://github.com/DBA-Japan/claude-code-toolkit をインストールして
 ```
 
-Claude が自動で clone → インストール → 設定完了まで行います。許可を求められたら承認するだけ。
+Claude が `git clone` → `bash install.sh --plan` → 確認 → 実行 → 環境診断まで段階的にやります。失敗箇所はバックアップから rollback 可能。
 
-### 方法 2: 対話モード（自分でカスタマイズ）
+### 手動
 
 ```bash
 git clone https://github.com/DBA-Japan/claude-code-toolkit.git
 cd claude-code-toolkit
-bash install.sh
+bash install.sh                       # 対話モード
+# または
+bash install.sh --profile web         # 推奨 profile を指定
+bash install.sh --plan --profile web  # 実行せずプレビューだけ
+bash install.sh --doctor              # 診断のみ
 ```
 
-### 方法 3: ワンライナー（クイック）
+### Profile（用途別）
 
+| Profile | 入るもの | 推奨ユーザー |
+|---|---|---|
+| `core` (default) | 入口 5 + 汎用裏方 + agents 15 + rules 6 + 最小 references | 全員 |
+| `web` | + Web 用 skills（design-extract, gsap, hyperframes 等）+ Web references | Web 制作 |
+| `media` | + 動画/音声 skills（veo3, video, notebooklm）+ media guides | 動画制作 |
+| `research` | + research guides（Exa/CiNii/J-Stage）+ claude-peers ガイド | リサーチャー |
+| `full` | 全部入り（上級者向け、明示警告付き） | 既に CC に慣れている人 |
+
+Profile は **後から追加可能**:
 ```bash
-git clone https://github.com/DBA-Japan/claude-code-toolkit.git && cd claude-code-toolkit && bash install.sh --quick --name "あなたの名前" --role "あなたの役割"
+bash install.sh --add web        # 既存に web profile を追加
+bash install.sh --rollback       # 直近バックアップから復元
 ```
 
-### オプション
+## 5 つの入口コマンド
 
-```bash
-bash install.sh --quick                    # デフォルト設定で即インストール
-bash install.sh --all                      # 全コンポーネント入り
-bash install.sh --quick --name "太郎"      # 名前だけ指定
-bash install.sh --help                     # ヘルプ表示
+| コマンド | 用途 | 内部で呼ぶもの |
+|---|---|---|
+| `/web-build` | Web 制作・デザイン実装 | designer/code-reviewer agents, design-extract/seo-audit skills |
+| `/research` | リサーチ（Web/学術/競合/ライブラリ） | Exa/Perplexity/context7 MCP, CiNii/J-Stage |
+| `/pptx` | 提案資料・スライド作成 | python-pptx, designer/writer agents |
+| `/video` | 動画制作（写真/素材動画/HTML/URL） | veo3/video/hyperframes skills, whisper |
+| `/ocr` | 画像・PDF の日本語 OCR | gemini-ocr.py（Gemini Vision） |
+| `/doctor` | 環境診断・依存確認 | manifests + brew/pip/MCP/API key 状況 |
+
+## 勝手に育つ環境
+
+Claude Code は使うほどあなた仕様に育ちます。このキットはその自動育成を 4 層で配線:
+
+```
+① auto memory（CC 本体機能）
+   └ 会話から好み・事実・参照先を自動的にメモリに保存
+
+② instinct システム（hook + command）
+   └ ツール使用ログから利用パターンを可視化・進化
+
+③ self-improving-agent（skill）
+   └ メモリの棚卸し・パターン昇格・スキル抽出
+
+④ governance / health（hook）
+   └ 危険コマンド検出 + 環境健全性の自動レポート
 ```
 
-**既に Claude Code を使っている人も安心**: 既存の settings.json・CLAUDE.md・MEMORY.md は自動バックアップされ、上書きされません。新しい Hooks とスキルだけが追加されます。
-
-## 含まれるスキル一覧
-
-| コマンド | 用途 |
-|---------|------|
-| `/context` | コンテキストウィンドウの診断・最適化 |
-| `/audit` | CC 環境の品質・セキュリティ監査 |
-| `/aside` | 作業中に別タスクを処理して復帰 |
-| `/blueprint` | 大きなプロジェクトの設計図作成 |
-| `/learn-eval` | セッション中の学びをメモリに保存 |
-| `/save-session` | セッション状態の詳細保存 |
-| `/resume-session` | 保存したセッションから復元 |
-| `/de-sloppify` | 実装完了後の品質クリーンアップ |
-| `/instinct` | 使い方パターンの可視化・進化 |
-| `/context-switch` | DEV/RESEARCH/REVIEW モード切替 |
-| `/chief-of-staff` | メッセージの仕分け・緊急度判定 |
-| `/guest-reply` | ゲストメッセージ返信（多言語対応） |
-| `/ota-listing` | OTA 物件説明文の最適化 |
-| `/review-reply` | レビュー返信の生成 |
-| `/operation-manual` | 運営マニュアル・チェックリスト作成 |
-| `/business-report` | 月次レポート・事業分析 |
-| `/sns-post` | SNS 投稿文の生成 |
-| `/admin-docs` | 行政書類・申請書の下書き |
-| `/translate-hotel` | 宿泊業特化の多言語翻訳（5 言語 + 文化説明） |
-| `/humanizer` | AI 臭消し・文章自然化（Wikipedia "Signs of AI writing" 25 パターン準拠） |
-
-## 含まれる Hooks 一覧
-
-| Hook | タイミング | 機能 |
-|------|-----------|------|
-| `load-session-summary.sh` | SessionStart | 前回セッションの要約を自動読み込み |
-| `health-check.sh` | SessionStart | ディスク・メモリ・プロセス数チェック |
-| `save-session-summary.sh` | Stop | セッション要約を自動保存 |
-| `cleanup.sh` | Stop | ゾンビプロセス掃除・一時ファイル削除 |
-| `block-no-verify.sh` | PreToolUse(Bash) | `--no-verify` をブロック |
-| `governance-capture.sh` | PreToolUse(Bash) | 危険コマンド・シークレット漏洩を検出 |
-| `learning-observer.sh` | PreToolUse/PostToolUse | 全ツール使用を自動記録 |
-| `doc-file-warning.sh` | PreToolUse(Write) | 不要なドキュメント増殖を警告 |
-| `suggest-compact.sh` | PostToolUse | 定期的に compact を提案 |
-| `pre-compact.sh` | PreCompact | 圧縮前にセッション状態を保存 |
-| `parse-transcript.py` | (内部) | トランスクリプト解析 |
-
-## リファレンス（16 ファイル）
-
-| ファイル | 内容 |
-|---------|------|
-| `web-libraries.md` | 50+ ライブラリの「やりたいこと → 使うもの」辞典 |
-| `design-patterns.md` | 日本 IT 企業 20 社から抽出した 8 パターン（コード例付き） |
-| `design-resources.md` | X(Twitter) フォローすべきアカウント + CSS Tips コード集 |
-| `design-rules.md` | AI っぽくならないデザインの禁止/必須/チェックリスト |
-| `cc-ecosystem.md` | スキル発見プラットフォーム、Task Master AI、Remotion、NotebookLM MCP |
-| `canvas-optimization.md` | Canvas 2D 軽量化の鉄則、表示されない 4 原因、iOS トラップ |
-| `ios-safari-fixes.md` | マーキー・backdrop-filter・GPU 合成レイヤーの iOS Safari 修正パターン |
-| `background-effects.md` | オーロラ、グラデーションメッシュ、マウス連動、SVG ノイズ |
-| `micro-interactions.md` | 磁気ボタン、リップル、光るボーダー、カーソルフォロワー |
-| `scroll-storytelling.md` | Pin / Scrub / 横スクロール / CSS scroll-driven animations |
-| `typography.md` | 日本語フォント CSS 設定、混植、テキストアニメーション |
-| `color-palettes.md` | 2026 年カラートレンド + 業種別パレット 5 案 |
-| `clip-path-reveals.md` | セクション出現アニメ 6 手法（円拡大、ブラインド、ダイヤモンド等） |
-| `section-transitions.md` | seam のないセクション色遷移 + Twilight Protocol 10 段階パレット |
-| `world-class-sites.md` | Stripe / Linear / Vercel / 日本企業 TOP10 の分析 |
-| `hotel-operations.md` | 宿泊施設運営リファレンス（OTA 運用、料金設定、多言語対応） |
-
-## ガイド一覧（11 ファイル）
-
-| ファイル | 内容 |
-|---------|------|
-| `getting-started.md` | Claude Code 初心者ガイド |
-| `hooks-explained.md` | Hooks の仕組みと設計思想 |
-| `memory-system.md` | メモリシステムの使い方 |
-| `context-management.md` | コンテキストウィンドウ管理 |
-| `skill-design.md` | スキルの自作方法 |
-| `claude-peers.md` | マルチインスタンス連携 |
-| `web-build-lessons.md` | Web 制作の致命的ミス集 & 解決パターン |
-| `apple-quality-design.md` | Apple / Stripe / Linear 級デザインガイド |
-| `hotel-getting-started.md` | ホテル経営者向け Claude Code 入門ガイド |
-| `humanizer-customization.md` | `/humanizer` を「自分の文体」にアレンジする 3 ステップ |
-| `click-edit-cursor-setup.md` | CC 入力欄でマウスクリック→カーソル移動を有効化（公式 NO_FLICKER + Cidan/ask 解説）|
+詳細: [`guides/auto-learning-system.md`](./guides/auto-learning-system.md) / [`guides/instinct-and-evolution.md`](./guides/instinct-and-evolution.md)
 
 ## ディレクトリ構成
 
 ```
 claude-code-toolkit/
-├── install.sh               # インタラクティブインストーラー
-├── CLAUDE.md.template        # CLAUDE.md テンプレート
-├── commands/                 # カスタムスキル (19個)
-├── hooks/                    # 自動化フック (11個)
-├── memory/                   # メモリシステムテンプレート
-├── settings/                 # 設定テンプレート
-├── references/               # Web 制作・ホテル運営リファレンス (16個)
-└── guides/                   # 使い方ガイド (11個)
+├── install.sh                # doctor 段階制インストーラー
+├── README.md                 # この文書
+├── SECURITY.md               # セキュリティ宣言
+├── CONTRIBUTING.md           # 貢献ガイド（公開 allowlist 思考）
+├── CLAUDE.md.template        # ~/CLAUDE.md の雛形
+│
+├── commands/                 # 入口 5 + 汎用裏方 17（合計 22）
+├── agents/                   # 汎用 sub-agent 15
+├── skills/                   # plugin-style skill 14
+├── rules/                    # 絶対ルール 6
+├── tools/                    # gemini-ocr.py + cdp-scripts
+├── mcp-servers/              # claude-peers セットアップ + MCP 案内
+├── manifests/                # skill-requirements.json（/doctor が読む）
+├── hooks/                    # 11 個（最小 3 + 自動学習 8）
+├── settings/                 # settings.json テンプレート
+├── memory/                   # MEMORY.md テンプレート
+├── references/               # Web 制作・CC 内部 リファレンス 23 個
+├── guides/                   # 使い方ガイド 19 個
+├── profiles/                 # profile 定義（将来拡張用）
+└── docs/                     # 設計ドキュメント
+    ├── AI_ASSIST_INSTALL.md  # Claude が「インストールして」と頼まれた時の手順書
+    └── MIGRATION_PHASE_2.md  # Phase 2 で plugin marketplace 化する計画
 ```
 
-## claude-peers（マルチインスタンス連携）
+## 設計原則
 
-複数の Claude Code インスタンスが互いに通信できる MCP サーバー。インストーラーでオプション選択可。
+### 1. 段階制セットアップ（Codex 反証反映）
+`doctor → plan → confirm → backup → install → verify → rollback hint`
 
-- 元リポジトリ: [louislva/claude-peers-mcp](https://github.com/louislva/claude-peers-mcp)
+「インストールして」一発で全部入る設計は **わざと採用していません**。`brew install` / `pip install` / `claude mcp add` / API key 設定は **doctor が案内するだけ** で、自動実行しない。
 
-## 参考
+### 2. オプトイン徹底
+デフォルト ON にしてよいのは「API キー不要・認証不要・壊れても CC 本体を巻き込まない」ものだけ:
 
+| デフォルト ON | デフォルト OFF（オプトイン） |
+|---|---|
+| auto memory | Exa / Perplexity MCP |
+| learning-observer hook | Playwright MCP |
+| governance-capture hook | whisper-cpp / ffmpeg |
+| Anthropic 公式 WebSearch | Gemini API |
+| context7 / repomix MCP（無料） | NotebookLM（OAuth） |
+
+### 3. 機密混入ゼロ
+公開リポなので `gitleaks` + `detect-secrets` + 禁止語辞書 + 正規表現で CI チェック。詳細: [`SECURITY.md`](./SECURITY.md)
+
+### 4. 公開 allowlist 思考
+内部素材を移植するのではなく、**公開用に再記述** する。詳細: [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+
+## 何が入っていないか
+
+明示しておく:
+
+- ❌ ホテル運営 / 旅館固有のコマンド（汎用 CC に集約）
+- ❌ 営業 / 商談 / 研修ヒアリング系の専門コマンド
+- ❌ 特定企業・クライアント名を含む事例
+- ❌ 売上数字・個別案件メモリ
+- ❌ 自動で API key を環境変数に書き込む処理（信頼境界）
+
+## トラブルシュート
+
+| 症状 | 対処 |
+|---|---|
+| `/doctor` が動かない | `~/.claude/commands/doctor.md` を確認、CC 再起動 |
+| MCP が登録できない | `guides/mcp-setup-full.md` |
+| Skill が認識されない | `/audit skills` |
+| メモリが膨らんだ | `/self-improving-agent health` |
+| Hook がエラーを出す | `~/.claude/hooks/` のファイル + 実行権限を確認 |
+| install.sh 失敗 | `bash install.sh --rollback` |
+
+## 関連 / 参考
+
+- [Claude Code 公式 docs](https://docs.anthropic.com/en/docs/claude-code)
+- [Claude Code Plugins](https://code.claude.com/docs/en/plugins)（Phase 2 で対応予定）
 - [everything-claude-code](https://github.com/affaan-m/everything-claude-code) — CC 運用の包括的ガイド
-- [Claude Code 公式ドキュメント](https://docs.anthropic.com/en/docs/claude-code)
 
 ## ライセンス
 
